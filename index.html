@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1120">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
+<title>FAMILY HQ · 우리집 대시보드</title>
+<style>
+/* ============ base ============ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,sans-serif;
+  background:#070b14;color:#e6edf7;min-height:100vh;font-size:14px;line-height:1.45;
+  letter-spacing:-.2px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+  overflow-x:hidden;
+}
+button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none;font-size:inherit;letter-spacing:inherit}
+input,select,textarea{font-family:inherit;font-size:14px;color:#e6edf7;letter-spacing:inherit}
+h1,h2,h3,h4{margin:0;font-weight:800}
+ul{margin:0;padding:0;list-style:none}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:rgba(148,163,184,.28);border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+
+:root{
+  --bg:#070b14; --bg2:#0B1120; --panel:#111827; --panel2:#1E293B;
+  --line:rgba(148,163,184,.14); --line2:rgba(148,163,184,.24);
+  --text:#e6edf7; --muted:#8fa3bf; --dim:#64748b;
+  --blue:#38BDF8; --green:#10B981; --amber:#F59E0B; --violet:#8B5CF6; --red:#F43F5E;
+  --r:18px;
+}
+
+/* background fx */
+.fx{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 540px at 12% -10%, rgba(56,189,248,.17), transparent 62%),
+    radial-gradient(760px 480px at 88% 0%, rgba(16,185,129,.14), transparent 60%),
+    radial-gradient(720px 520px at 50% 108%, rgba(139,92,246,.11), transparent 62%);
+}
+.fx::after{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(148,163,184,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(148,163,184,.055) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(circle at 50% 26%,#000 0%,transparent 76%);
+  mask-image:radial-gradient(circle at 50% 26%,#000 0%,transparent 76%);
+}
+
+/* ============ top bar ============ */
+.top{position:sticky;top:0;z-index:40;
+  background:linear-gradient(180deg,rgba(7,11,20,.94),rgba(7,11,20,.72));
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.top-in{max-width:1560px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:16px;position:relative}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{position:relative;width:40px;height:40px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;
+  background:conic-gradient(from 190deg,#38BDF8,#10B981,#8B5CF6,#38BDF8);
+  box-shadow:0 0 0 1px rgba(255,255,255,.1),0 12px 26px -14px #38BDF8}
+.logo::after{content:'';position:absolute;inset:2.5px;border-radius:9.5px;
+  background:radial-gradient(120% 120% at 20% 10%,#1b2740,#0a1020)}
+.logo b{position:relative;z-index:1;font-size:12.5px;font-weight:900;letter-spacing:.6px;color:#dbeafe}
+.brand h1{font-size:15.5px;letter-spacing:.3px;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.brand h1 em{font-style:normal;color:var(--blue)}
+.brand p{margin:1px 0 0;font-size:10.5px;color:var(--muted);letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap}
+.live{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;letter-spacing:.8px;
+  color:var(--green);background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.32);
+  padding:2px 7px;border-radius:99px;text-transform:uppercase}
+.live i{width:5px;height:5px;border-radius:99px;background:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.18);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.top-mid{display:flex;flex-direction:column;align-items:flex-end;margin-left:auto;gap:1px;padding-right:4px}
+.clock{font-size:15px;font-weight:800;letter-spacing:.5px;color:#eaf2ff}
+.clock span{font-size:11px;color:var(--dim);margin-left:3px;font-weight:700}
+.datestr{font-size:11px;color:var(--muted);letter-spacing:.2px}
+.top-right{display:flex;align-items:center;gap:9px}
+
+.ring{position:relative;width:46px;height:46px;flex:0 0 auto}
+.ring svg{transform:rotate(-90deg);display:block}
+.ring .bg{fill:none;stroke:rgba(148,163,184,.16);stroke-width:4}
+.ring .fg{fill:none;stroke:url(#ringG);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:900;letter-spacing:-.4px}
+.ring b i{font-style:normal;font-size:8px;color:var(--muted);margin-left:1px}
+.ring .cap{position:absolute;left:50%;transform:translateX(-50%);bottom:-13px;font-size:8px;letter-spacing:.6px;color:var(--dim);white-space:nowrap}
+
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+  padding:7px 11px;border-radius:11px;border:1px solid var(--line2);
+  background:rgba(30,41,59,.6);color:var(--muted);white-space:nowrap;transition:.2s}
+.badge:hover{border-color:rgba(56,189,248,.45);color:#dbeafe}
+.badge i{width:7px;height:7px;border-radius:99px;background:var(--dim);flex:0 0 auto}
+.badge.on{color:#a7f3d0;border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.1)}
+.badge.on i{background:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.18);animation:pulse 2s infinite}
+.badge.err{color:#fecdd3;border-color:rgba(244,63,94,.38);background:rgba(244,63,94,.1)}
+.badge.err i{background:var(--red)}
+.icon-btn{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  border:1px solid var(--line2);background:rgba(30,41,59,.6);color:#c8d6ea;transition:.2s}
+.icon-btn:hover{background:rgba(56,189,248,.14);border-color:rgba(56,189,248,.45);color:#eaf2ff;transform:translateY(-1px)}
+.icon-btn svg{width:17px;height:17px}
+
+/* ============ layout ============ */
+.wrap{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:16px 22px 40px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:13px;align-items:stretch}
+.sp3{grid-column:span 3}.sp4{grid-column:span 4}.sp5{grid-column:span 5}
+.sp6{grid-column:span 6}.sp7{grid-column:span 7}.sp8{grid-column:span 8}.sp12{grid-column:span 12}
+
+.panel{position:relative;border-radius:var(--r);border:1px solid var(--line);
+  background:linear-gradient(158deg,rgba(30,41,59,.72),rgba(11,17,32,.94));
+  box-shadow:0 26px 60px -38px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.04);
+  overflow:hidden;display:flex;flex-direction:column}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(56,189,248,.55),rgba(16,185,129,.35),transparent);opacity:.7}
+.panel::after{content:'';position:absolute;top:8px;right:8px;width:10px;height:10px;
+  border-top:1px solid rgba(148,163,184,.35);border-right:1px solid rgba(148,163,184,.35);
+  border-top-right-radius:3px;pointer-events:none}
+.p-head{display:flex;align-items:center;gap:8px;padding:13px 15px 9px}
+.p-head h2{font-size:12.5px;letter-spacing:.7px;text-transform:uppercase;color:#d5e2f5;display:flex;align-items:center;gap:7px}
+.p-head h2 .dot{width:6px;height:6px;border-radius:2px;background:var(--blue);box-shadow:0 0 10px var(--blue)}
+.p-head .idx{margin-left:auto;font-size:9.5px;letter-spacing:1.4px;color:var(--dim)}
+.p-body{padding:0 15px 15px;flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* ============ member cards ============ */
+.mcard{position:relative;border-radius:var(--r);border:1px solid var(--line);padding:14px 14px 13px;
+  background:linear-gradient(165deg,rgba(30,41,59,.8),rgba(11,17,32,.94));overflow:hidden;
+  box-shadow:0 22px 50px -34px #000;transition:transform .22s ease,border-color .22s ease;
+  display:flex;flex-direction:column}
+.mcard:hover{transform:translateY(-3px);border-color:rgba(148,163,184,.34)}
+.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--c),transparent 78%);opacity:.95}
+.mcard::after{content:'';position:absolute;right:-46px;top:-46px;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,var(--c),transparent 68%);opacity:.16;pointer-events:none}
+.mc-top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.ava{position:relative;width:46px;height:46px;flex:0 0 auto;border-radius:15px;display:grid;place-items:center;
+  font-size:18px;font-weight:900;color:#fff;
+  background:linear-gradient(150deg,var(--c),rgba(255,255,255,.06) 70%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.14),0 10px 22px -14px var(--c)}
+.ava::after{content:'';position:absolute;inset:0;border-radius:15px;background:rgba(7,11,20,.42);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.ava span{position:relative;z-index:1;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.ava.sm{width:32px;height:32px;border-radius:11px;font-size:13px}
+.mc-id{min-width:0;flex:1}
+.mc-id .role{font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--c);font-weight:800}
+.mc-id .name{font-size:15.5px;font-weight:800;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;border-radius:5px;transition:.15s;padding:0 2px;margin:0 -2px}
+.mc-id .name:hover{background:rgba(56,189,248,.12);color:#fff}
+.mc-stats{display:flex;gap:6px;margin-top:11px;position:relative;z-index:1}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:5px 8px;border-radius:9px;
+  background:rgba(148,163,184,.09);border:1px solid var(--line);color:#c8d6ea;white-space:nowrap}
+.chip.hot{color:#fde68a;background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3)}
+.chip.pt{color:#a7f3d0;background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.28)}
+.hw{display:flex;gap:10px;margin-top:9px;font-size:11px;color:var(--muted);position:relative;z-index:1}
+.hw b{color:#dbeafe;font-weight:800;font-size:12.5px}
+.hw .up{color:var(--green);font-weight:800}
+.hw .up.mut{color:var(--dim)}
+.bar{height:6px;border-radius:99px;background:rgba(148,163,184,.16);overflow:hidden;margin-top:11px;position:relative;z-index:1}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--c),#fff8);
+  box-shadow:0 0 12px -2px var(--c);transition:width .5s cubic-bezier(.4,0,.2,1)}
+.mc-foot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:11px;position:relative;z-index:1}
+section{scroll-margin-top:74px}
+.mc-foot .pct{font-size:11px;color:var(--muted);font-weight:700}
+.mc-foot .pct b{color:#eaf2ff;font-size:13px}
+.cheer{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.2px;padding:6px 10px;border-radius:9px;
+  border:1px solid rgba(56,189,248,.3);background:rgba(56,189,248,.1);color:#bae6fd;transition:.18s;white-space:nowrap}
+.cheer:hover{background:rgba(56,189,248,.22);border-color:rgba(56,189,248,.6);color:#fff;transform:translateY(-1px)}
+
+/* ============ todos ============ */
+.tabs{display:flex;gap:5px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;font-size:11.5px;font-weight:700;padding:6px 11px;border-radius:9px;
+  border:1px solid var(--line);background:rgba(148,163,184,.06);color:var(--muted);transition:.18s;white-space:nowrap}
+.tab:hover{color:#eaf2ff;border-color:var(--line2)}
+.tab.on{color:#04121f;background:linear-gradient(150deg,#7dd3fc,#38BDF8);border-color:transparent;
+  box-shadow:0 8px 20px -12px #38BDF8}
+.tlist{display:flex;flex-direction:column;gap:6px;flex:1;min-height:0;max-height:466px;overflow-y:auto;padding-right:2px}
+.trow{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:11px;
+  border:1px solid transparent;background:rgba(148,163,184,.055);transition:.15s}
+.trow:hover{background:rgba(148,163,184,.1);border-color:var(--line)}
+.trow.done{opacity:.5}
+.trow.done .txt{text-decoration:line-through}
+.cb{width:20px;height:20px;flex:0 0 auto;border-radius:7px;border:1.6px solid var(--line2);
+  display:grid;place-items:center;transition:.18s;background:rgba(7,11,20,.5)}
+.cb svg{width:11px;height:11px;opacity:0;transform:scale(.6);transition:.18s;stroke:#04121f;stroke-width:3.4;fill:none}
+.cb:hover{border-color:var(--blue)}
+.trow.done .cb{background:linear-gradient(150deg,#34d399,#10B981);border-color:transparent}
+.trow.done .cb svg{opacity:1;transform:scale(1)}
+.txt{font-size:12.5px;font-weight:600;color:#dbe7f6;flex:1;min-width:0;overflow-wrap:anywhere}
+.trow .who{font-size:9.5px;font-weight:800;letter-spacing:.4px;padding:2px 6px;border-radius:6px;
+  color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);border:1px solid color-mix(in srgb,var(--c) 30%,transparent);white-space:nowrap}
+.trow .pt{font-size:10px;color:var(--dim);font-weight:700;white-space:nowrap}
+.trow .del{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;color:var(--dim);font-size:13px;
+  opacity:0;transition:.15s;flex:0 0 auto}
+.trow:hover .del{opacity:1}
+.trow .del:hover{background:rgba(244,63,94,.16);color:#fda4af}
+.addrow{display:flex;gap:6px;margin-top:auto;padding-top:10px}
+.addrow input{flex:1;min-width:0;background:rgba(7,11,20,.6);border:1px solid var(--line2);border-radius:10px;
+  padding:9px 11px;outline:none;transition:.18s;font-size:12.5px}
+.addrow input:focus{border-color:rgba(56,189,248,.6);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.addrow select{background:rgba(7,11,20,.6);border:1px solid var(--line2);border-radius:10px;padding:0 6px;font-size:11.5px;color:#c8d6ea;outline:none}
+.btn{font-size:12px;font-weight:800;padding:9px 13px;border-radius:10px;border:1px solid transparent;
+  background:linear-gradient(150deg,#7dd3fc,#38BDF8);color:#04121f;transition:.18s;white-space:nowrap}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.ghost{background:rgba(148,163,184,.08);border-color:var(--line2);color:#c8d6ea}
+.btn.ghost:hover{background:rgba(148,163,184,.16);color:#fff}
+.btn.sm{padding:6px 10px;font-size:11px;border-radius:8px}
+.btn.gr{background:linear-gradient(150deg,#34d399,#10B981)}
+.btn.amber{background:linear-gradient(150deg,#fbbf24,#F59E0B)}
+.btn.full{width:100%;justify-content:center}
+
+/* ============ growth boost ============ */
+.sons{display:grid;grid-template-columns:1fr;gap:10px}
+.son{border:1px solid var(--line);border-radius:13px;padding:10px 11px;background:rgba(7,11,20,.42)}
+.son-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.son-h b{font-size:12.5px}
+.son-h .cnt{margin-left:auto;font-size:10.5px;font-weight:800;color:var(--dim)}
+.son-h .cnt.hi{color:var(--green)}
+.rules{display:flex;flex-direction:column;gap:4px}
+.rule{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:9px;text-align:left;
+  border:1px solid transparent;background:rgba(148,163,184,.05);transition:.15s;width:100%}
+.rule:hover{background:rgba(148,163,184,.11)}
+.rule .ic{width:22px;height:22px;flex:0 0 auto;border-radius:7px;display:grid;place-items:center;font-size:11px;
+  background:rgba(148,163,184,.1);border:1px solid var(--line)}
+.rule .rl{flex:1;min-width:0;font-size:11.5px;font-weight:600;color:#cfdcef;line-height:1.3}
+.rule.ok{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.28)}
+.rule.ok .rl{color:#a7f3d0}
+.rule.ok .ic{background:rgba(16,185,129,.24);border-color:rgba(16,185,129,.4)}
+.rule .tick{width:16px;height:16px;border-radius:99px;border:1.5px solid var(--line2);flex:0 0 auto;display:grid;place-items:center}
+.rule.ok .tick{background:var(--green);border-color:transparent}
+.rule .tick svg{width:9px;height:9px;stroke:#04121f;stroke-width:3.6;fill:none;opacity:0}
+.rule.ok .tick svg{opacity:1}
+
+/* ============ team stats ============ */
+.stats{display:flex;flex-direction:column;gap:6px}
+.srow{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:11px;background:rgba(148,163,184,.05);
+  border:1px solid transparent;transition:.15s}
+.srow:hover{background:rgba(148,163,184,.09);border-color:var(--line)}
+.srow .k{font-size:11px;color:var(--muted);font-weight:600}
+.srow .v{margin-left:auto;font-size:15px;font-weight:900;letter-spacing:-.4px;color:#eaf2ff}
+.srow .v small{font-size:10px;font-weight:700;color:var(--dim);margin-left:2px}
+.srow .ico{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:11px;background:rgba(148,163,184,.1)}
+.srow .ico svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.rank{display:flex;align-items:center;gap:7px;padding:2px 2px;font-size:11px}
+.rank .rk{width:14px;font-size:9.5px;font-weight:900;color:var(--dim);text-align:center}
+.rank .nm{font-size:11px;font-weight:700;width:42px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank .b2{flex:1;height:5px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden}
+.rank .b2 i{display:block;height:100%;border-radius:99px}
+.rank b{font-size:10.5px;font-weight:800;color:#dbeafe;min-width:38px;text-align:right}
+.rk-h{display:flex;align-items:center;gap:6px;margin:10px 0 5px;padding-top:8px;border-top:1px solid var(--line);
+  font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--dim);font-weight:800}
+
+/* ============ chart ============ */
+.segs{display:flex;gap:5px;flex-wrap:wrap}
+.seg{font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;border:1px solid var(--line);
+  background:rgba(148,163,184,.06);color:var(--muted);transition:.16s}
+.seg.on{color:#eaf2ff;border-color:rgba(56,189,248,.55);background:rgba(56,189,248,.14);box-shadow:0 0 0 1px rgba(56,189,248,.12) inset}
+.legend{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:10px;color:var(--dim);margin:2px 0 6px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.chartbox{position:relative;width:100%}
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+.cstats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.cstat{padding:8px 10px;border-radius:11px;background:rgba(148,163,184,.06);border:1px solid var(--line)}
+.cstat .k{font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--dim);font-weight:800}
+.cstat .v{font-size:16px;font-weight:900;letter-spacing:-.5px;margin-top:1px}
+.cstat .v small{font-size:10px;color:var(--muted);font-weight:700;margin-left:5px}
+.cstat .d{font-size:10px;color:var(--green);font-weight:800}
+.cfoot{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.records{margin-top:11px;border-top:1px solid var(--line);padding-top:9px}
+.records table{width:100%;border-collapse:collapse;font-size:11px}
+.records th{font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--dim);font-weight:800;text-align:right;padding:3px 4px}
+.records th:first-child{text-align:left}
+.records td{text-align:right;padding:4px;color:#cfdcef;border-top:1px solid rgba(148,163,184,.09)}
+.records td:first-child{text-align:left;color:var(--muted)}
+.records td b{color:#eaf2ff}
+.records td .p{color:var(--blue);font-weight:800}
+
+/* ============ calendar ============ */
+.cal-h{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.cal-h b{font-size:13px;letter-spacing:.2px}
+.cal-h .nav{margin-left:auto;display:flex;gap:4px}
+.cal-h .nav button{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+  border:1px solid var(--line);background:rgba(148,163,184,.07);color:#c8d6ea;font-size:11px}
+.cal-h .nav button:hover{background:rgba(56,189,248,.16);border-color:rgba(56,189,248,.4)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;max-width:520px;margin:0 auto}
+.cal .wd{font-size:9.5px;text-align:center;color:var(--dim);font-weight:800;padding-bottom:2px}
+.cal .wd.sun{color:#fb7185}
+.cal .wd.sat{color:#60a5fa}
+.day{position:relative;height:38px;display:grid;place-items:center;border-radius:8px;font-size:11px;
+  color:#c3d1e5;font-weight:600;border:1px solid transparent;transition:.14s}
+.day.mute{color:rgba(100,116,139,.55)}
+.day:hover{background:rgba(148,163,184,.14)}
+.day.today{background:linear-gradient(150deg,#38BDF8,#10B981);color:#04121f;font-weight:900;box-shadow:0 8px 20px -12px #38BDF8}
+.day .dots{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);display:flex;gap:2px}
+.day .dots i{width:3.5px;height:3.5px;border-radius:99px;background:var(--blue)}
+.day.today .dots i{background:#04121f}
+.up{display:flex;flex-direction:column;gap:5px;margin-top:11px;border-top:1px solid var(--line);padding-top:9px}
+.up-h{font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--dim);font-weight:800;margin-bottom:1px}
+.ev{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:10px;background:rgba(148,163,184,.055);
+  border:1px solid transparent;transition:.15s}
+.ev:hover{background:rgba(148,163,184,.1);border-color:var(--line2)}
+.ev .dd{font-size:9.5px;font-weight:900;padding:3px 6px;border-radius:6px;background:rgba(56,189,248,.14);
+  color:#7dd3fc;border:1px solid rgba(56,189,248,.28);white-space:nowrap;letter-spacing:.2px}
+.ev .dd.now{background:rgba(245,158,11,.18);color:#fbbf24;border-color:rgba(245,158,11,.4)}
+.ev .tt{font-size:11.5px;font-weight:600;color:#dbe7f6;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev .dt{font-size:10px;color:var(--dim);white-space:nowrap}
+.ev .del{color:var(--dim);font-size:12px;padding:0 2px;opacity:0}
+.ev:hover .del{opacity:1}
+.ev .del:hover{color:#fda4af}
+.empty{font-size:11.5px;color:var(--dim);padding:12px 4px;text-align:center}
+.calsum{margin-top:auto;padding-top:10px;display:flex;flex-direction:column;gap:4px}
+.calsum div{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);
+  padding:6px 9px;border-radius:9px;background:rgba(148,163,184,.05);border:1px solid transparent}
+.calsum div b{margin-left:auto;font-size:11px;font-weight:800;color:#dbeafe;max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ============ board ============ */
+.board{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;flex:1;min-height:0}
+.board>div:first-child{display:flex;flex-direction:column;min-height:0}
+.bform{display:flex;gap:6px;margin-bottom:9px}
+.bform input{flex:1;min-width:0;background:rgba(7,11,20,.6);border:1px solid var(--line2);border-radius:10px;padding:9px 11px;outline:none;transition:.18s;font-size:12.5px}
+.bform input:focus{border-color:rgba(56,189,248,.6);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.bform select{background:rgba(7,11,20,.6);border:1px solid var(--line2);border-radius:10px;padding:0 6px;font-size:11.5px;color:#c8d6ea;outline:none}
+.msgs{display:flex;flex-direction:column;gap:6px;flex:1;min-height:0;max-height:300px;overflow-y:auto;padding-right:2px}
+.msg{display:flex;gap:8px;padding:8px 9px;border-radius:11px;background:rgba(148,163,184,.05);border:1px solid transparent;transition:.15s}
+.msg:hover{background:rgba(148,163,184,.09);border-color:var(--line)}
+.msg .body{min-width:0;flex:1}
+.msg .mh{display:flex;align-items:baseline;gap:6px}
+.msg .nm{font-size:11.5px;font-weight:800;color:#eaf2ff}
+.msg .tm{font-size:9.5px;color:var(--dim)}
+.msg .tx{font-size:12px;color:#cfdcef;margin-top:1px;overflow-wrap:anywhere}
+.msg .del{margin-left:auto;color:var(--dim);font-size:12px;opacity:0}
+.msg:hover .del{opacity:1}
+.msg .del:hover{color:#fda4af}
+.tip{padding:10px 11px;border-radius:12px;background:linear-gradient(150deg,rgba(16,185,129,.13),rgba(7,11,20,.3));
+  border:1px solid rgba(16,185,129,.24)}
+.tip h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:#6ee7b7;margin-bottom:5px}
+.tip p{margin:0 0 6px;font-size:11.5px;color:#b9cbe2;line-height:1.5}
+.tip p:last-child{margin-bottom:0}
+.tip b{color:#eaf2ff}
+
+/* ============ modal ============ */
+.ov{position:fixed;inset:0;z-index:90;background:rgba(3,7,15,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.2s}
+.ov.open{opacity:1;pointer-events:auto}
+.modal{width:min(560px,100%);max-height:86vh;display:flex;flex-direction:column;border-radius:20px;
+  border:1px solid rgba(148,163,184,.26);background:linear-gradient(165deg,#16233a,#0b1120 70%);
+  box-shadow:0 40px 100px -40px #000;transform:translateY(10px) scale(.985);transition:.22s}
+.ov.open .modal{transform:none}
+.m-head{display:flex;align-items:center;gap:10px;padding:15px 16px 11px;border-bottom:1px solid var(--line)}
+.m-head h3{font-size:14px;letter-spacing:.2px}
+.m-head button{margin-left:auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  color:var(--muted);border:1px solid var(--line);background:rgba(148,163,184,.07)}
+.m-head button:hover{color:#fff;background:rgba(244,63,94,.18);border-color:rgba(244,63,94,.4)}
+.m-body{padding:14px 16px 16px;overflow-y:auto}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--dim);font-weight:800;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;background:rgba(7,11,20,.6);border:1px solid var(--line2);
+  border-radius:10px;padding:9px 11px;outline:none;transition:.18s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(56,189,248,.6);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.field textarea{resize:vertical;min-height:70px}
+.hint{font-size:11px;color:var(--dim);line-height:1.55;margin:2px 0 10px}
+.hint code{background:rgba(148,163,184,.14);padding:1px 5px;border-radius:4px;font-size:10.5px;color:#bae6fd}
+.set-row{display:grid;grid-template-columns:32px 1fr .8fr 1.1fr;gap:6px;align-items:center;margin-bottom:7px}
+.set-row input{background:rgba(7,11,20,.6);border:1px solid var(--line2);border-radius:9px;padding:7px 9px;font-size:12px;outline:none;min-width:0}
+.set-row input:focus{border-color:rgba(56,189,248,.55)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.chips button{font-size:11px;padding:5px 9px;border-radius:8px;border:1px solid var(--line2);
+  background:rgba(148,163,184,.08);color:#c8d6ea}
+.chips button:hover{background:rgba(56,189,248,.16);border-color:rgba(56,189,248,.45);color:#fff}
+.actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.actions .btn{flex:1}
+.danger{color:#fda4af;border-color:rgba(244,63,94,.35)!important;background:rgba(244,63,94,.1)!important}
+.danger:hover{background:rgba(244,63,94,.2)!important}
+.syncbox{border:1px solid var(--line);border-radius:12px;padding:11px;background:rgba(7,11,20,.4);margin-bottom:11px}
+.syncbox .st{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);margin-bottom:8px}
+.syncbox .st b{color:#eaf2ff}
+hr.sep{border:0;border-top:1px solid var(--line);margin:14px 0}
+
+/* toast */
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:120;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+.toast{font-size:12px;font-weight:700;padding:9px 14px;border-radius:11px;color:#04121f;
+  background:linear-gradient(150deg,#7dd3fc,#38BDF8);box-shadow:0 18px 40px -18px #38BDF8;
+  animation:tin .25s ease,tout .3s ease 2.3s forwards}
+.toast.gr{background:linear-gradient(150deg,#34d399,#10B981);box-shadow:0 18px 40px -18px #10B981}
+.toast.re{background:linear-gradient(150deg,#fb7185,#F43F5E);box-shadow:0 18px 40px -18px #F43F5E;color:#fff}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes tout{to{opacity:0;transform:translateY(-6px)}}
+
+/* bottom nav (mobile) */
+.bnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;
+  background:linear-gradient(180deg,rgba(7,11,20,.86),rgba(7,11,20,.98));
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line);
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));grid-template-columns:repeat(5,1fr);gap:2px}
+.bnav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:10px;
+  text-decoration:none;color:var(--muted);font-size:9.5px;font-weight:800;letter-spacing:.2px}
+.bnav a i{font-size:15px;line-height:1;filter:grayscale(.35) opacity(.85)}
+.bnav a svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}
+.bnav a:hover,.bnav a:active{background:rgba(56,189,248,.12);color:#bae6fd}
+
+footer.foot{max-width:1560px;margin:0 auto;padding:6px 22px 26px;font-size:10.5px;color:var(--dim);line-height:1.6}
+footer.foot b{color:var(--muted)}
+
+/* ============ responsive ============ */
+@media(max-width:1180px){
+  .grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .sp3{grid-column:span 3}.sp4,.sp5,.sp7,.sp8,.sp12{grid-column:span 6}.sp6{grid-column:span 3}
+  .board{grid-template-columns:1fr}
+}
+@media(max-width:860px){
+  .top-in{padding:9px 13px;gap:9px}
+  .brand p{display:none}
+  .brand h1{font-size:13.5px}
+  .logo{width:34px;height:34px;border-radius:10px}
+  .logo b{font-size:10.5px}
+  .clock{font-size:13px}
+  .datestr{display:none}
+  .ring{width:38px;height:38px}
+  .ring b{font-size:10px}
+  .ring .cap{display:none}
+  .badge{padding:6px 8px;font-size:10px}
+  .badge .lbl{display:none}
+  .wrap{padding:12px 12px 34px}
+  .grid{gap:10px}
+  .p-head{padding:11px 12px 8px}
+  .p-body{padding:0 12px 13px}
+  .tlist{max-height:none}
+  .msgs{max-height:none}
+  .bnav{display:grid}
+  .wrap{padding-bottom:86px}
+  .modal{max-height:92vh}
+  .set-row{grid-template-columns:28px 1fr;gap:5px}
+  .set-row input:nth-of-type(1){grid-column:2}
+  .cstat .v{font-size:14px}
+  .day{height:34px}
+  .hw{gap:8px;font-size:10.5px}
+  .clock span{font-size:10px}
+}
+@media(max-width:720px){
+  .grid{grid-template-columns:1fr}
+  [class*="sp"]{grid-column:1/-1!important}
+  .mcard{padding:12px}
+  .mc-stats{gap:5px}
+  .chip{font-size:10.5px;padding:4px 7px}
+  .sons{grid-template-columns:1fr 1fr;gap:7px}
+  .rule .rl{font-size:10.5px}
+  .cstats{grid-template-columns:repeat(3,1fr);gap:5px}
+  .cstat{padding:7px 8px}
+  .cstat .v{font-size:13.5px}
+  .bform{display:grid;grid-template-columns:1fr auto;gap:6px}
+  .bform select{grid-column:1;grid-row:1;width:100%}
+  .bform .btn{grid-column:2;grid-row:1}
+  .bform input{grid-column:1/-1;grid-row:2;width:100%}
+  .toasts{bottom:84px}
+}
+@media(max-width:420px){
+  .sons{grid-template-columns:1fr}
+  .brand h1{font-size:12.5px}
+}
+@media(max-width:480px){
+  .live{display:none}
+  .brand h1{font-size:12px}
+  .msgs{max-height:340px}
+}
+@media print{.top,.bnav,.fx{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<div class="fx"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#38BDF8"/><stop offset="55%" stop-color="#10B981"/><stop offset="100%" stop-color="#8B5CF6"/>
+  </linearGradient>
+  <linearGradient id="lineG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#38BDF8" stop-opacity=".9"/><stop offset="100%" stop-color="#10B981" stop-opacity=".5"/>
+  </linearGradient>
+</defs></svg>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <div class="logo"><b>HQ</b></div>
+      <div>
+        <h1 id="topTitle">FAMILY <em>HQ</em></h1>
+        <p id="topSub">우리집 대시보드 · FAMILY OPERATIONS CENTER</p>
+      </div>
+      <span class="live"><i></i>LIVE</span>
+    </div>
+    <div class="top-mid">
+      <div class="clock" id="clock">--:--<span>--</span></div>
+      <div class="datestr" id="datestr">----</div>
+    </div>
+    <div class="top-right">
+      <div class="ring" title="가족 전체 오늘 달성률">
+        <svg viewBox="0 0 46 46" width="46" height="46"><circle class="bg" cx="23" cy="23" r="19"/><circle class="fg" id="ringFg" cx="23" cy="23" r="19" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
+        <b id="ringTxt">0<i>%</i></b>
+      </div>
+      <button class="badge" id="syncBadge" data-act="sync"><i></i><span class="lbl">로컬 모드</span></button>
+      <button class="icon-btn" data-act="settings" title="설정" aria-label="설정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9v.09a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid" id="grid">
+    <div class="sp12" style="display:contents" id="memberCards"></div>
+
+    <section class="panel sp5" id="sec-todos">
+      <div class="p-head"><h2><span class="dot"></span>오늘 할 일 · ROUTINE</h2><span class="idx" id="todoIdx">00/00</span></div>
+      <div class="p-body">
+        <div class="tabs" id="todoTabs"></div>
+        <div class="tlist" id="todoList"></div>
+        <div class="addrow">
+          <input id="todoInput" placeholder="할 일 추가 (예: 물 2L 마시기)" maxlength="60">
+          <select id="todoWho"></select>
+          <button class="btn" data-act="addTodo">추가</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel sp4" id="sec-boost">
+      <div class="p-head"><h2><span class="dot" style="background:var(--green);box-shadow:0 0 10px var(--green)"></span>키 크기 위한 활동</h2><span class="idx" id="boostIdx">0/10</span></div>
+      <div class="p-body">
+        <div class="sons" id="sons"></div>
+      </div>
+    </section>
+
+    <section class="panel sp3" id="sec-stats">
+      <div class="p-head"><h2><span class="dot" style="background:var(--amber);box-shadow:0 0 10px var(--amber)"></span>팀 현황</h2><span class="idx">STATS</span></div>
+      <div class="p-body"><div class="stats" id="stats"></div></div>
+    </section>
+
+    <section class="panel sp8" id="sec-growth">
+      <div class="p-head">
+        <h2><span class="dot" style="background:var(--violet);box-shadow:0 0 10px var(--violet)"></span>성장 곡선 · GROWTH</h2>
+        <span class="idx" id="growthIdx">KCDC 2017</span>
+      </div>
+      <div class="p-body">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+          <div class="segs" id="kidTabs"></div>
+          <div class="segs" id="metricTabs" style="margin-left:auto"></div>
+        </div>
+        <div class="legend">
+          <span><i style="background:rgba(56,189,248,.16);border:1px solid rgba(56,189,248,.3)"></i>3~97 백분위</span>
+          <span><i style="background:rgba(56,189,248,.3)"></i>10~90</span>
+          <span><i style="background:rgba(16,185,129,.34)"></i>25~75</span>
+          <span><i style="background:#e2e8f0"></i>중앙값(50)</span>
+          <span><i style="background:#38BDF8;border-radius:99px"></i>우리 아이 기록</span>
+        </div>
+        <div class="chartbox" id="chartbox"></div>
+        <div class="cstats" id="cstats"></div>
+        <div class="cfoot">
+          <button class="btn gr" data-act="addMeasure">＋ 오늘 키·몸무게 기록하기</button>
+          <button class="btn ghost sm" data-act="growthInfo">도표 기준</button>
+        </div>
+        <div class="records" id="records"></div>
+      </div>
+    </section>
+
+    <section class="panel sp4" id="sec-cal">
+      <div class="p-head"><h2><span class="dot" style="background:var(--amber);box-shadow:0 0 10px var(--amber)"></span>가족 일정</h2><span class="idx" id="calIdx">CAL</span></div>
+      <div class="p-body">
+        <div class="cal-h">
+          <b id="calTitle">2026년 11월</b>
+          <div class="nav">
+            <button data-act="calPrev" aria-label="이전 달">◀</button>
+            <button data-act="calToday" aria-label="이번 달">•</button>
+            <button data-act="calNext" aria-label="다음 달">▶</button>
+          </div>
+        </div>
+        <div class="cal" id="cal"></div>
+        <div class="up">
+          <div class="up-h">다가오는 일정 <button class="btn sm ghost" data-act="addEvent" style="float:right;margin-top:-4px">＋ 추가</button></div>
+          <div id="events" style="display:flex;flex-direction:column;gap:5px"></div>
+        </div>
+        <div class="calsum" id="calsum"></div>
+      </div>
+    </section>
+
+    <section class="panel sp12" id="sec-board">
+      <div class="p-head"><h2><span class="dot"></span>팀 보드 · TEAM BOARD</h2><span class="idx">MESSAGES</span></div>
+      <div class="p-body">
+        <div class="board">
+          <div>
+            <div class="bform">
+              <select id="boardFrom"></select>
+              <input id="boardInput" placeholder="가족에게 짧은 응원 · 공지 남기기" maxlength="120">
+              <button class="btn" data-act="postBoard">보내기</button>
+            </div>
+            <div class="msgs" id="msgs"></div>
+          </div>
+          <div class="tip" id="tipBox">
+            <h4>코치 노트 · GROWTH TIP</h4>
+            <p>성장판은 <b>자극 + 영양 + 수면</b>이 함께 맞아야 열립니다. 줄넘기처럼 발끝이 바닥을 박차는 운동이 성장호르몬 분비에 가장 좋아요.</p>
+            <p>잠들기 <b>1시간 전</b>엔 화면을 끄고, 취침은 같은 시간에. 깊은 잠(서파수면)에서 성장호르몬이 가장 많이 나옵니다.</p>
+            <p>키는 <b>매월 같은 날 아침</b>에 재야 정확합니다. <b>＋ 오늘 키·몸무게 기록</b>로 그래프를 갱신해 주세요.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <b>FAMILY HQ</b> · 데이터는 이 기기 브라우저(localStorage)에 자동 저장됩니다. 상단 <b>동기화</b> 배지에서 태블릿·핸드폰 실시간 연결과 JSON 백업을 설정할 수 있어요.
+    성장 곡선은 질병관리청·대한소아청소년과학회 「2017 소아청소년 성장도표」 남아 신장·체중 3·50·97 백분위 기준이며, 10·25·75·90 백분위 곡선은 정규분포 근사로 보간한 참고 곡선입니다.
+    <span id="footStamp" style="display:block;margin-top:4px"></span>
+  </footer>
+</main>
+
+<nav class="bnav">
+  <a href="#sec-todos"><svg viewBox="0 0 24 24"><path d="M9 11.5l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>할 일</a>
+  <a href="#sec-boost"><svg viewBox="0 0 24 24"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg>성장</a>
+  <a href="#sec-growth"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15v3M12 9v9M17 12v6"/></svg>곡선</a>
+  <a href="#sec-cal"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>일정</a>
+  <a href="#sec-board"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>보드</a>
+</nav>
+
+<div class="ov" id="ov">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="m-head"><h3 id="mTitle">설정</h3><button data-act="closeModal" aria-label="닫기">✕</button></div>
+    <div class="m-body" id="mBody"></div>
+  </div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* =========================================================================
+   FAMILY HQ — single-file family dashboard
+   data: localStorage  |  optional: Firebase Realtime Database (REST polling)
+   charts: hand-built SVG (no external libraries, works offline)
+   ========================================================================= */
+'use strict';
+
+/* ---------------- utils ---------------- */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const pad2 = n => String(n).padStart(2, '0');
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nfmt = n => Number(n || 0).toLocaleString('ko-KR');
+const uid = () => Math.random().toString(36).slice(2, 9);
+const WD = ['일', '월', '화', '수', '목', '금', '토'];
+
+function dateKey(d = new Date()) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function parseKey(s) { const p = String(s || '').split('-').map(Number); return new Date(p[0], (p[1] || 1) - 1, p[2] || 1); }
+function dateDiff(a, b) { return Math.round((parseKey(b) - parseKey(a)) / 86400000); }
+function prettyDate(s) { const d = parseKey(s); return d.getMonth() + 1 + '.' + d.getDate(); }
+function mdDate(s) { const d = parseKey(s); return (d.getMonth() + 1) + '/' + d.getDate(); }
+function ageAt(birth, dateStr) {
+  if (!birth) return null;
+  const b = parseKey(birth), d = parseKey(dateStr);
+  return (d - b) / (365.2425 * 86400000);
+}
+function ago(t) {
+  const s = Math.floor((Date.now() - t) / 1000);
+  if (s < 60) return '방금';
+  if (s < 3600) return Math.floor(s / 60) + '분 전';
+  if (s < 86400) return Math.floor(s / 3600) + '시간 전';
+  if (s < 604800) return Math.floor(s / 86400) + '일 전';
+  return new Date(t).getMonth() + 1 + '/' + new Date(t).getDate();
+}
+
+/* ---------------- growth reference (KCDC 2017, boys) ----------------
+   신장(cm) / 체중(kg) 3·50·97 백분위수, 만 6~18세 (질병관리청·대한소아청소년과학회)
+   10·25·75·90 백분위는 3·50·97 세 값을 z-공간에서 선형 보간하여 산출.
+-------------------------------------------------------------------- */
+const AGES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+const GROWTH = {
+  height: {
+    label: '키', unit: 'cm', min: 6, max: 18,
+    p3:  [107.4, 113.1, 118.5, 123.6, 128.4, 133.2, 138.2, 144.2, 150.6, 156.5, 160.3, 162.2, 163.3],
+    p50: [115.9, 122.1, 127.9, 133.4, 138.8, 144.7, 151.4, 158.6, 165.0, 169.2, 171.4, 172.6, 173.6],
+    p97: [125.0, 131.7, 137.9, 143.9, 150.2, 157.1, 164.7, 171.9, 176.9, 179.9, 181.7, 183.1, 184.3],
+    tick: 10, pad: 3
+  },
+  weight: {
+    label: '몸무게', unit: 'kg', min: 6, max: 18,
+    p3:  [17.1, 18.9, 20.9, 23.0, 25.2, 27.7, 30.8, 34.7, 39.2, 43.7, 47.5, 50.1, 52.0],
+    p50: [21.3, 24.2, 27.5, 31.3, 35.5, 40.2, 45.4, 50.9, 56.0, 60.1, 63.1, 65.0, 66.7],
+    p97: [28.3, 33.2, 38.7, 44.7, 51.2, 58.1, 65.4, 72.2, 77.3, 80.5, 82.5, 84.3, 85.9],
+    tick: 10, pad: 2
+  }
+};
+const Z = { p3: -1.881, p10: -1.2816, p25: -0.6745, p50: 0, p75: 0.6745, p90: 1.2816, p97: 1.881 };
+const PCTS = [3, 10, 25, 50, 75, 90, 97];
+
+function interpArr(arr, age) {
+  const a = clamp(age, 6, 18), i = Math.floor(a) - 6, t = a - (6 + i);
+  if (i >= arr.length - 1) return arr[arr.length - 1];
+  return arr[i] + (arr[i + 1] - arr[i]) * t;
+}
+function anchors(metric, age) {
+  const G = GROWTH[metric];
+  return { p3: interpArr(G.p3, age), p50: interpArr(G.p50, age), p97: interpArr(G.p97, age) };
+}
+/* z -> value  (piecewise linear through p3 / p50 / p97) */
+function valueAtZ(a, z) {
+  if (z <= 0) return a.p3 + (a.p50 - a.p3) * (z - Z.p3) / (0 - Z.p3);
+  return a.p50 + (a.p97 - a.p50) * (z / Z.p97);
+}
+/* value -> z */
+function zOfValue(a, v) {
+  if (v <= a.p50) return Z.p3 * (a.p50 - v) / Math.max(.001, a.p50 - a.p3);
+  return Z.p97 * (v - a.p50) / Math.max(.001, a.p97 - a.p50);
+}
+function normCdf(z) {
+  const t = 1 / (1 + 0.2316419 * Math.abs(z));
+  const d = 0.3989422804 * Math.exp(-z * z / 2);
+  const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+  return z > 0 ? 1 - p : p;
+}
+function percentileOf(metric, age, value) {
+  if (!(value > 0) || age == null) return null;
+  const a = anchors(metric, age);
+  if (value <= a.p3) { const z = zOfValue(a, value); return Math.max(0.3, normCdf(z) * 100); }
+  if (value >= a.p97) { const z = zOfValue(a, value); return Math.min(99.7, normCdf(z) * 100); }
+  return clamp(normCdf(zOfValue(a, value)) * 100, .3, 99.7);
+}
+
+/* ---------------- state ---------------- */
+const KEY = 'familyhq.v1';
+const COLORS = { dad: '#38BDF8', mom: '#F472B6', son1: '#10B981', son2: '#F59E0B' };
+
+function defaultRules() {
+  return [
+    { id: 'stretch', ic: '🧘', t: '스트레칭 · 철봉 매달리기 10분' },
+    { id: 'cardio',  ic: '🏀', t: '성장판 자극 운동 (줄넘기 500 · 농구 1시간)' },
+    { id: 'sleep',   ic: '🌙', t: '수면 목표 취침 (22:30 이전)' },
+    { id: 'diet',    ic: '🥩', t: '단백질 · 칼슘 식단 3회' },
+    { id: 'supp',    ic: '💊', t: '영양제 · 성장 기록 체크' }
+  ];
+}
+
+function defaultState() {
+  const t = dateKey();
+  return {
+    v: 1, updatedAt: Date.now(),
+    title: 'FAMILY HQ', subtitle: '우리집 대시보드',
+    members: [
+      { id: 'dad',  role: '아빠',   name: '아빠', tag: 'FATHER', color: '#38BDF8', birth: '1980-01-01', mono: 'F',
+        points: 320, streak: 12, streakLast: null, chart: false,
+        measures: [{ date: '2026-11-01', h: 175, w: 78 }] },
+      { id: 'mom',  role: '엄마',   name: '엄마', tag: 'MOTHER', color: '#F472B6', birth: '', mono: 'M',
+        points: 410, streak: 19, streakLast: null, chart: false,
+        measures: [{ date: '2026-11-01', h: 163, w: 56 }] },
+      { id: 'son1', role: '중3',    name: '첫째', tag: 'MIDDLE 3', color: '#10B981', birth: '2011-01-01', mono: '3',
+        points: 285, streak: 7, streakLast: null, chart: true,
+        measures: [
+          { date: '2024-11-01', h: 165.0, w: 55.0 },
+          { date: '2025-05-01', h: 168.0, w: 57.0 },
+          { date: '2025-11-01', h: 170.0, w: 59.0 },
+          { date: '2026-05-01', h: 171.5, w: 60.5 },
+          { date: '2026-11-01', h: 172.5, w: 61.5 }
+        ] },
+      { id: 'son2', role: '초5',    name: '둘째', tag: 'ELEM 5', color: '#F59E0B', birth: '2015-01-01', mono: '5',
+        points: 340, streak: 15, streakLast: null, chart: true,
+        measures: [
+          { date: '2025-05-01', h: 140.0, w: 34.0 },
+          { date: '2025-11-01', h: 142.5, w: 35.5 },
+          { date: '2026-05-01', h: 145.0, w: 37.0 },
+          { date: '2026-11-01', h: 147.0, w: 38.5 }
+        ] }
+    ],
+    todos: [
+      { id: uid(), memberId: 'dad',  text: '아침 스트레칭 10분', done: false, points: 10 },
+      { id: uid(), memberId: 'dad',  text: '물 2L 마시기', done: false, points: 10 },
+      { id: uid(), memberId: 'dad',  text: '오늘 일정 확인', done: false, points: 10 },
+      { id: uid(), memberId: 'mom',  text: '아침 요가 15분', done: false, points: 10 },
+      { id: uid(), memberId: 'mom',  text: '저녁 식단 준비 (단백질 위주)', done: false, points: 10 },
+      { id: uid(), memberId: 'son1', text: '영어 단어 30개', done: false, points: 10 },
+      { id: uid(), memberId: 'son1', text: '수학 오답노트 정리', done: false, points: 10 },
+      { id: uid(), memberId: 'son1', text: '줄넘기 300회', done: false, points: 10 },
+      { id: uid(), memberId: 'son2', text: '받아쓰기 1회', done: false, points: 10 },
+      { id: uid(), memberId: 'son2', text: '독서 30분', done: false, points: 10 },
+      { id: uid(), memberId: 'son2', text: '철봉 매달리기 3분', done: false, points: 10 }
+    ],
+    rules: defaultRules(),
+    checks: {},                       // {'2026-11-15': {son1:['stretch'], son2:[...]}}
+    events: [
+      { id: uid(), date: '2026-11-19', title: '둘째 치과 정기검진', memberId: 'son2' },
+      { id: uid(), date: '2026-11-23', title: '첫째 기말고사 시작', memberId: 'son1' },
+      { id: uid(), date: '2026-11-28', title: '가족 나들이 (남산 산책)', memberId: '' },
+      { id: uid(), date: '2026-12-06', title: '가족 사진 촬영', memberId: '' }
+    ],
+    board: [
+      { id: uid(), memberId: 'dad',  text: '오늘도 화이팅! 다 같이 힘내자 💪', at: Date.now() - 3600e3 * 5 },
+      { id: uid(), memberId: 'mom',  text: '저녁에 다 같이 맛있는 거 먹자', at: Date.now() - 3600e3 * 3.5 },
+      { id: uid(), memberId: 'son1', text: '오늘 줄넘기 500개 완료!', at: Date.now() - 3600e3 * 2 },
+      { id: uid(), memberId: 'son2', text: '철봉 3분 성공 👍', at: Date.now() - 3600e3 * 1.2 }
+    ],
+    lastReset: t,
+    sync: { url: '', path: 'family-hq' }
+  };
+}
+
+let state = load();
+let ui = { kid: 'son1', metric: 'height', todoFilter: 'all', calMonth: null };
+
+/* sync runtime (declared early: save()/render() run during boot) */
+const sync = { url: '', path: 'family-hq', timer: null, msg: '', ok: false, err: false };
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return defaultState();
+    const s = JSON.parse(raw);
+    if (!s || !Array.isArray(s.members) || !s.members.length) return defaultState();
+    s.todos = s.todos || []; s.events = s.events || []; s.board = s.board || [];
+    s.checks = s.checks || {}; s.rules = s.rules && s.rules.length ? s.rules : defaultRules();
+    s.sync = s.sync || { url: '', path: 'family-hq' };
+    s.members.forEach(m => { m.measures = m.measures || []; if (!m.color) m.color = COLORS[m.id] || '#38BDF8'; });
+    return s;
+  } catch (e) { return defaultState(); }
+}
+
+let pushTimer = null;
+function save() {
+  state.updatedAt = Date.now();
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { toast('저장 공간이 부족합니다', 're'); }
+  clearTimeout(pushTimer);
+  if (sync.url) pushTimer = setTimeout(pushRemote, 900);
+}
+
+/* daily reset */
+(function dailyReset() {
+  const t = dateKey();
+  if (state.lastReset !== t) {
+    state.todos.forEach(x => x.done = false);
+    state.lastReset = t;
+  }
+  state.members.forEach(m => {
+    if (m.streakLast && dateDiff(m.streakLast, t) > 1) { m.streak = 0; m.streakLast = null; }
+  });
+  save();
+})();
+
+/* ---------------- helpers ---------------- */
+const M = id => state.members.find(m => m.id === id);
+const monoOf = m => m.mono || String((m.name || '?')).trim().charAt(0);
+const memberColor = id => (M(id) || {}).color || '#38BDF8';
+const memberName = id => (M(id) || {}).name || '가족';
+const todosOf = id => state.todos.filter(t => t.memberId === id);
+const doneCount = id => todosOf(id).filter(t => t.done).length;
+const rateOf = id => { const a = todosOf(id); return a.length ? Math.round(a.filter(x => x.done).length / a.length * 100) : 0; };
+const overall = () => state.todos.length ? Math.round(state.todos.filter(t => t.done).length / state.todos.length * 100) : 0;
+const today = dateKey();
+const checksToday = mid => (state.checks[today] && state.checks[today][mid]) || [];
+const lastH = m => { const a = (m.measures || []).filter(x => x.h > 0).sort((p, q) => p.date < q.date ? -1 : 1); return a[a.length - 1]; };
+const lastW = m => { const a = (m.measures || []).filter(x => x.w > 0).sort((p, q) => p.date < q.date ? -1 : 1); return a[a.length - 1]; };
+const prevH = m => { const a = (m.measures || []).filter(x => x.h > 0).sort((p, q) => p.date < q.date ? -1 : 1); return a[a.length - 2]; };
+
+/* ---------------- toast ---------------- */
+function toast(msg, kind) {
+  const d = document.createElement('div');
+  d.className = 'toast' + (kind ? ' ' + kind : '');
+  d.textContent = msg;
+  $('#toasts').appendChild(d);
+  setTimeout(() => d.remove(), 2800);
+}
+
+/* ---------------- header ---------------- */
+function tickClock() {
+  const d = new Date();
+  $('#clock').innerHTML = pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + '<span>' + pad2(d.getSeconds()) + '</span>';
+  $('#datestr').textContent = d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate()) + ' (' + WD[d.getDay()] + ')';
+}
+setInterval(tickClock, 1000); tickClock();
+
+function renderHeader() {
+  $('#topTitle').innerHTML = esc(state.title).replace(/HQ/, '<em>HQ</em>');
+  $('#topSub').textContent = state.subtitle || '';
+  const p = overall();
+  $('#ringFg').style.strokeDashoffset = String(119.4 * (1 - p / 100));
+  $('#ringTxt').innerHTML = p + '<i>%</i>';
+  renderBadge();
+}
+
+/* ---------------- member cards ---------------- */
+function renderMembers() {
+  $('#memberCards').innerHTML = state.members.map(m => {
+    const lh = lastH(m), pw = prevH(m);
+    const rate = rateOf(m.id);
+    const hw = [];
+    if (lh) hw.push(`<span>키 <b>${lh.h}</b>cm</span>`);
+    if (lastW(m)) hw.push(`<span>몸무게 <b>${lastW(m).w}</b>kg</span>`);
+    if (m.chart && lh && pw) {
+      const d = Math.round((lh.h - pw.h) * 10) / 10;
+      hw.push(`<span class="up">▲ ${d > 0 ? '+' : ''}${d}cm</span>`);
+    }
+    return `
+    <article class="mcard sp3" style="--c:${m.color}" id="mc-${m.id}">
+      <div class="mc-top">
+        <div class="ava"><span>${esc(monoOf(m))}</span></div>
+        <div class="mc-id">
+          <div class="role">${esc(m.role)} · ${esc(m.tag || '')}</div>
+          <div class="name" data-act="editMember" data-id="${m.id}" title="클릭해서 이름 수정">${esc(m.name)}</div>
+        </div>
+      </div>
+      <div class="mc-stats">
+        <span class="chip hot">🔥 ${m.streak || 0}일</span>
+        <span class="chip pt">✦ ${nfmt(m.points)}P</span>
+        <span class="chip">${todosOf(m.id).length}개 중 ${doneCount(m.id)}개</span>
+      </div>
+      <div class="hw">${hw.join('') || '<span style="color:var(--dim)">기록 없음</span>'}</div>
+      <div class="bar"><i style="width:${rate}%"></i></div>
+      <div class="mc-foot">
+        <span class="pct"><b>${rate}%</b> 오늘 달성</span>
+        <button class="cheer" data-act="cheer" data-id="${m.id}">👏 응원 보내기</button>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+/* ---------------- todos ---------------- */
+function renderTodos() {
+  const tabs = [{ id: 'all', label: '전체' }, ...state.members.map(m => ({ id: m.id, label: m.role }))];
+  $('#todoTabs').innerHTML = tabs.map(t => {
+    const n = t.id === 'all' ? state.todos.length : todosOf(t.id).length;
+    const d = t.id === 'all' ? state.todos.filter(x => x.done).length : doneCount(t.id);
+    return `<button class="tab ${ui.todoFilter === t.id ? 'on' : ''}" data-act="filter" data-id="${t.id}">${esc(t.label)} ${d}/${n}</button>`;
+  }).join('');
+
+  const list = ui.todoFilter === 'all' ? state.todos : todosOf(ui.todoFilter);
+  $('#todoList').innerHTML = list.length ? list.map(t => {
+    const m = M(t.memberId) || {};
+    return `<div class="trow ${t.done ? 'done' : ''}" style="--c:${m.color || '#38BDF8'}">
+      <button class="cb" data-act="toggleTodo" data-id="${t.id}" aria-label="완료 토글"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg></button>
+      <span class="txt">${esc(t.text)}</span>
+      ${ui.todoFilter === 'all' ? `<span class="who">${esc(m.role || '')}</span>` : ''}
+      <span class="pt">+${t.points || 10}</span>
+      <button class="del" data-act="delTodo" data-id="${t.id}" aria-label="삭제">✕</button>
+    </div>`;
+  }).join('') : '<div class="empty">할 일이 없습니다. 아래에서 추가해 보세요.</div>';
+
+  const all = state.todos.length, dn = state.todos.filter(t => t.done).length;
+  $('#todoIdx').textContent = pad2(dn) + '/' + pad2(all);
+
+  $('#todoWho').innerHTML = state.members.map(m =>
+    `<option value="${m.id}" ${m.id === 'dad' ? 'selected' : ''}>${esc(m.role)}</option>`).join('');
+}
+
+/* ---------------- growth boost ---------------- */
+function renderBoost() {
+  const sons = state.members.filter(m => m.chart);
+  let total = 0, done = 0;
+  $('#sons').innerHTML = sons.map(m => {
+    const ck = checksToday(m.id);
+    total += state.rules.length; done += ck.length;
+    return `<div class="son">
+      <div class="son-h">
+        <span class="ava sm" style="--c:${m.color}"><span>${esc(monoOf(m))}</span></span>
+        <b>${esc(m.name)} <span style="color:var(--dim);font-weight:700;font-size:10px">${esc(m.role)}</span></b>
+        <span class="cnt ${ck.length >= state.rules.length ? 'hi' : ''}">${ck.length}/${state.rules.length}</span>
+      </div>
+      <div class="rules">
+        ${state.rules.map(r => {
+          const ok = ck.includes(r.id);
+          return `<button class="rule ${ok ? 'ok' : ''}" data-act="toggleRule" data-mid="${m.id}" data-rid="${r.id}">
+            <span class="ic">${r.ic}</span>
+            <span class="rl">${esc(r.t)}</span>
+            <span class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  $('#boostIdx').textContent = done + '/' + total;
+}
+
+/* ---------------- team stats ---------------- */
+function renderStats() {
+  const totalPts = state.members.reduce((a, m) => a + (m.points || 0), 0);
+  const top = state.members.slice().sort((a, b) => (b.streak || 0) - (a.streak || 0))[0] || {};
+  const sons = state.members.filter(m => m.chart);
+  const rTotal = sons.length * state.rules.length;
+  const rDone = sons.reduce((a, m) => a + checksToday(m.id).length, 0);
+  const left = state.todos.filter(t => !t.done).length;
+  const rows = [
+    ['trophy', '가족 총 포인트', nfmt(totalPts), 'P', 'var(--blue)'],
+    ['flame', '최고 연속 기록', (top.streak || 0), '일 · ' + esc(top.name || ''), 'var(--amber)'],
+    ['trend', '성장 루틴', rDone, ' / ' + rTotal, 'var(--violet)'],
+    ['check', '오늘 남은 할 일', left, ' 개', 'var(--green)'],
+    ['users', '가족 달성률', overall(), '%', '#F472B6']
+  ];
+  const ICON = {
+    trophy: '<path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
+    flame: '<path d="M12 22a6 6 0 0 0 6-6c0-4-3-5-3-9 0 0-3 2-3 5 0-1-1-3-2-4 0 3-4 4-4 8a6 6 0 0 0 6 6z"/>',
+    trend: '<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    users: '<circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 5.2a3.2 3.2 0 0 1 0 6M18 13.6a6.5 6.5 0 0 1 3.5 6.4"/>'
+  };
+  $('#stats').innerHTML = rows.map(r =>
+    `<div class="srow"><span class="ico" style="color:${r[4]}">
+       <svg viewBox="0 0 24 24">${ICON[r[0]]}</svg></span><span class="k">${r[1]}</span>
+     <span class="v">${r[2]}<small>${r[3]}</small></span></div>`).join('')
+    + `<div class="rk-h">포인트 순위</div>`
+    + state.members.slice().sort((a, b) => (b.points || 0) - (a.points || 0)).map((m, i) => {
+        const mx = Math.max(1, ...state.members.map(x => x.points || 0));
+        return `<div class="rank"><span class="rk">${i + 1}</span>
+          <span class="nm" style="color:${m.color}">${esc(m.name)}</span>
+          <span class="b2"><i style="width:${Math.round((m.points || 0) / mx * 100)}%;background:${m.color}"></i></span>
+          <b>${nfmt(m.points)}</b></div>`;
+      }).join('');
+}
+
+/* ---------------- growth chart ---------------- */
+function seriesOf(m, metric) {
+  return (m.measures || [])
+    .filter(r => (metric === 'height' ? r.h : r.w) > 0 && ageAt(m.birth, r.date) != null)
+    .map(r => ({ date: r.date, age: ageAt(m.birth, r.date), v: metric === 'height' ? r.h : r.w }))
+    .sort((a, b) => a.age - b.age);
+}
+
+function renderChart() {
+  const m = M(ui.kid) || state.members.find(x => x.chart);
+  if (!m) { $('#chartbox').innerHTML = '<div class="empty">성장 기록 대상이 없습니다.</div>'; return; }
+  const metric = ui.metric, G = GROWTH[metric];
+
+  $('#kidTabs').innerHTML = state.members.filter(x => x.chart).map(x =>
+    `<button class="seg ${x.id === ui.kid ? 'on' : ''}" data-act="kid" data-id="${x.id}">${esc(x.role)} · ${esc(x.name)}</button>`).join('');
+  $('#metricTabs').innerHTML = [['height', '키 cm'], ['weight', '몸무게 kg']].map(o =>
+    `<button class="seg ${metric === o[0] ? 'on' : ''}" data-act="metric" data-id="${o[0]}">${o[1]}</button>`).join('');
+
+  if (!m.birth) {
+    $('#chartbox').innerHTML = '<div class="empty">생년월일을 설정에 입력하면 성장 곡선이 그려집니다.</div>';
+    $('#cstats').innerHTML = ''; $('#records').innerHTML = ''; return;
+  }
+
+  const pts = seriesOf(m, metric);
+  const boxW = Math.max(280, Math.min(920, Math.round(($('#chartbox').clientWidth || 720))));
+  const small = boxW < 520;
+  const W = boxW, H = small ? 232 : 330;
+  const P = { l: small ? 27 : 42, r: small ? 12 : 16, t: 14, b: small ? 30 : 40 };
+  const x0 = P.l, x1 = W - P.r, y0 = P.t, y1 = H - P.b;
+  const FS = small ? 9 : 9.5, xStep = small ? 2 : 1;
+
+  // domains
+  let lo = Infinity, hi = -Infinity;
+  for (let a = 6; a <= 18.001; a += 0.2) { const an = anchors(metric, a); lo = Math.min(lo, an.p3); hi = Math.max(hi, an.p97); }
+  pts.forEach(p => { lo = Math.min(lo, p.v - 1); hi = Math.max(hi, p.v + 1); });
+  lo = Math.floor((lo - G.pad) / 5) * 5; hi = Math.ceil((hi + G.pad) / 5) * 5;
+  const X = a => x0 + (clamp(a, 6, 18) - 6) / 12 * (x1 - x0);
+  const Y = v => y1 - (v - lo) / (hi - lo) * (y1 - y0);
+
+  // percentile band paths
+  function bandPath(loP, hiP) {
+    let up = '', dn = '';
+    for (let a = 6; a <= 18.001; a += 0.2) {
+      const an = anchors(metric, a);
+      const v1 = valueAtZ(an, Z['p' + hiP]), v2 = valueAtZ(an, Z['p' + loP]);
+      up += (up ? 'L' : 'M') + X(a).toFixed(1) + ' ' + Y(v1).toFixed(1);
+      dn = 'L' + X(a).toFixed(1) + ' ' + Y(v2).toFixed(1) + dn;
+    }
+    return up + dn + 'Z';
+  }
+  function curve(pct) {
+    let d = '';
+    for (let a = 6; a <= 18.001; a += 0.2) {
+      const an = anchors(metric, a), v = valueAtZ(an, Z['p' + pct]);
+      d += (d ? 'L' : 'M') + X(a).toFixed(1) + ' ' + Y(v).toFixed(1);
+    }
+    return d;
+  }
+
+  // grid
+  let grid = '';
+  const stepY = G.tick;
+  for (let v = Math.ceil(lo / stepY) * stepY; v <= hi; v += stepY) {
+    grid += `<line x1="${x0}" y1="${Y(v).toFixed(1)}" x2="${x1}" y2="${Y(v).toFixed(1)}" stroke="rgba(148,163,184,.13)" stroke-width="1"/>
+             <text x="${x0 - 6}" y="${(Y(v) + 3.4).toFixed(1)}" text-anchor="end" font-size="${FS}" fill="#64748b">${v}</text>`;
+  }
+  for (let a = 6; a <= 18; a++) {
+    grid += `<line x1="${X(a).toFixed(1)}" y1="${y0}" x2="${X(a).toFixed(1)}" y2="${y1}" stroke="rgba(148,163,184,.07)" stroke-width="1"/>`;
+    if ((a - 6) % xStep === 0)
+      grid += `<text x="${X(a).toFixed(1)}" y="${y1 + 14}" text-anchor="middle" font-size="${FS}" fill="#64748b">${a}</text>`;
+  }
+
+  // child points
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + X(p.age).toFixed(1) + ' ' + Y(p.v).toFixed(1)).join('');
+  const dots = pts.map(p => {
+    const pc = percentileOf(metric, p.age, p.v);
+    return `<g><circle cx="${X(p.age).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="4.6" fill="#0B1120" stroke="#38BDF8" stroke-width="2.2"/>
+      <circle cx="${X(p.age).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="1.7" fill="#38BDF8"/>
+      <title>${p.date} · ${p.v}${G.unit}${pc ? ' · P' + Math.round(pc) : ''}</title></g>`;
+  }).join('');
+
+  const last = pts[pts.length - 1];
+  let lastMark = '';
+  if (last) {
+    const lx = X(last.age), ly = Y(last.v);
+    const right = lx < x1 - 96;
+    lastMark = `<circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="9" fill="#38BDF8" opacity=".18"/>
+      <circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="5.4" fill="#38BDF8" stroke="#04121f" stroke-width="1.6"/>
+      <text x="${(right ? lx + 13 : lx - 13).toFixed(1)}" y="${(ly - 8).toFixed(1)}" text-anchor="${right ? 'start' : 'end'}"
+        font-size="${small ? 10.5 : 11.5}" font-weight="800" fill="#eaf2ff">${last.v}${G.unit}</text>`;
+  }
+
+  // today's age marker
+  const todayAge = ageAt(m.birth, today);
+  let todayMark = '';
+  if (todayAge && todayAge >= 6 && todayAge <= 18) {
+    todayMark = `<line x1="${X(todayAge).toFixed(1)}" y1="${y0}" x2="${X(todayAge).toFixed(1)}" y2="${y1}"
+      stroke="rgba(245,158,11,.55)" stroke-width="1.2" stroke-dasharray="3 4"/>
+      <text x="${X(todayAge).toFixed(1)}" y="${y0 + 10}" text-anchor="middle" font-size="${small ? 8 : 8.5}" fill="#f59e0b" font-weight="800">오늘</text>`;
+  }
+
+  $('#chartbox').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.name)} ${G.label} 성장 곡선">
+    <defs>
+      <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38BDF8" stop-opacity=".30"/><stop offset="100%" stop-color="#38BDF8" stop-opacity=".02"/></linearGradient>
+      <linearGradient id="cg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#10B981"/></linearGradient>
+    </defs>
+    <path d="${bandPath(3, 97)}" fill="rgba(56,189,248,.07)" stroke="none"/>
+    <path d="${bandPath(10, 90)}" fill="rgba(56,189,248,.09)" stroke="none"/>
+    <path d="${bandPath(25, 75)}" fill="rgba(16,185,129,.11)" stroke="none"/>
+    ${grid}
+    <path d="${curve(97)}" fill="none" stroke="rgba(56,189,248,.34)" stroke-width="1"/>
+    <path d="${curve(75)}" fill="none" stroke="rgba(16,185,129,.28)" stroke-width="1"/>
+    <path d="${curve(50)}" fill="none" stroke="rgba(226,232,240,.75)" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <path d="${curve(25)}" fill="none" stroke="rgba(16,185,129,.28)" stroke-width="1"/>
+    <path d="${curve(3)}" fill="none" stroke="rgba(56,189,248,.34)" stroke-width="1"/>
+    <text x="${X(18) - 4}" y="${Y(valueAtZ(anchors(metric, 18), Z.p50)) - 7}" text-anchor="end" font-size="${small ? 8 : 8.5}" fill="#94a3b8">중앙값</text>
+    ${todayMark}
+    ${pts.length > 1 ? `<path d="${line}" fill="none" stroke="url(#cg2)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>` : ''}
+    ${dots}${lastMark}
+    <text x="${(x0 + x1) / 2}" y="${H - 4}" text-anchor="middle" font-size="${small ? 8 : 9}" fill="#475569">만 나이 (세)</text>
+  </svg>`;
+
+  // stats
+  const curV = last ? last.v : null;
+  const curAge = last ? last.age : todayAge;
+  const pc = curV ? percentileOf(metric, curAge, curV) : null;
+  const delta = (() => {
+    if (pts.length < 2) return null;
+    const a = pts[pts.length - 1], b = pts[pts.length - 2];
+    return Math.round((a.v - b.v) * 10) / 10;
+  })();
+  $('#cstats').innerHTML = `
+    <div class="cstat"><div class="k">현재 ${G.label}</div><div class="v">${curV != null ? curV : '-'}<small>${G.unit}</small></div>
+      <div class="d" style="color:var(--dim)">${last ? mdDate(last.date) + ' 측정' : '기록 없음'}</div></div>
+    <div class="cstat"><div class="k">백분위</div><div class="v">${pc ? 'P' + Math.round(pc) : '-'}${pc ? `<small>상위 ${Math.max(1, Math.round(100 - pc))}%</small>` : ''}</div>
+      <div class="d" style="color:var(--dim)">또래 100명 중 ${pc ? Math.round(pc) : '-'}번째</div></div>
+    <div class="cstat"><div class="k">지난 측정 대비</div><div class="v" style="color:${delta > 0 ? 'var(--green)' : 'var(--dim)'}">${delta != null ? (delta > 0 ? '+' : '') + delta : '-'}<small>${G.unit}</small></div>
+      <div class="d" style="color:var(--dim)">${pts.length > 1 ? mdDate(pts[pts.length - 2].date) + ' → ' + mdDate(pts[pts.length - 1].date) : '비교할 기록 없음'}</div></div>`;
+
+  // records table
+  const recent = pts.slice(-5).reverse();
+  $('#records').innerHTML = recent.length ? `<table>
+    <thead><tr><th>측정일</th><th>나이</th><th>${G.label}</th><th>백분위</th></tr></thead>
+    <tbody>${recent.map(p => `<tr><td>${p.date}</td><td>${p.age.toFixed(1)}세</td>
+      <td><b>${p.v}${G.unit}</b></td>
+      <td class="p">P${Math.round(percentileOf(metric, p.age, p.v))}</td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">아직 측정 기록이 없습니다. 첫 기록을 남겨보세요.</div>';
+}
+
+/* ---------------- calendar & events ---------------- */
+function renderCalendar() {
+  if (!ui.calMonth) { const d = new Date(); ui.calMonth = { y: d.getFullYear(), m: d.getMonth() }; }
+  const { y, m } = ui.calMonth;
+  $('#calTitle').textContent = y + '년 ' + (m + 1) + '월';
+  $('#calIdx').textContent = (m + 1) + '월';
+
+  const first = new Date(y, m, 1).getDay();
+  const days = new Date(y, m + 1, 0).getDate();
+  const prevDays = new Date(y, m, 0).getDate();
+  let html = WD.map((w, i) => `<div class="wd ${i === 0 ? 'sun' : i === 6 ? 'sat' : ''}">${w}</div>`).join('');
+
+  const evByDate = {};
+  state.events.forEach(e => { (evByDate[e.date] = evByDate[e.date] || []).push(e); });
+
+  for (let i = first - 1; i >= 0; i--) html += `<div class="day mute">${prevDays - i}</div>`;
+  for (let d = 1; d <= days; d++) {
+    const key = y + '-' + pad2(m + 1) + '-' + pad2(d);
+    const evs = evByDate[key] || [];
+    html += `<div class="day ${key === today ? 'today' : ''}" data-act="dayClick" data-date="${key}" title="${evs.map(e => e.title).join(' / ')}">
+      ${d}${evs.length ? `<span class="dots">${evs.slice(0, 3).map(e => `<i style="background:${memberColor(e.memberId)}"></i>`).join('')}</span>` : ''}
+    </div>`;
+  }
+  const rest = (7 - ((first + days) % 7)) % 7;
+  for (let d = 1; d <= rest; d++) html += `<div class="day mute">${d}</div>`;
+  $('#cal').innerHTML = html;
+
+  const up = state.events
+    .filter(e => dateDiff(today, e.date) >= 0)
+    .sort((a, b) => a.date < b.date ? -1 : 1)
+    .slice(0, 5);
+  $('#events').innerHTML = up.length ? up.map(e => {
+    const dd = dateDiff(today, e.date);
+    const label = dd === 0 ? 'D-DAY' : 'D-' + dd;
+    return `<div class="ev">
+      <span class="dd ${dd <= 1 ? 'now' : ''}">${label}</span>
+      <span class="tt" data-act="editEvent" data-id="${e.id}" title="클릭해서 수정" style="cursor:pointer">${esc(e.title)}</span>
+      <span class="dt">${prettyDate(e.date)}</span>
+      <button class="del" data-act="delEvent" data-id="${e.id}" aria-label="삭제">✕</button>
+    </div>`;
+  }).join('') : '<div class="empty">다가오는 일정이 없습니다.</div>';
+
+  const mk = y + '-' + pad2(m + 1);
+  const monthCount = state.events.filter(e => String(e.date).startsWith(mk)).length;
+  const nx = up[0];
+  $('#calsum').innerHTML = `
+    <div><span>이번 달 일정</span><b>${monthCount}건</b></div>
+    <div><span>가장 가까운 일정</span><b>${nx ? nx.title + ' · D-' + dateDiff(today, nx.date) : '없음'}</b></div>
+    <div><span>오늘 남은 할 일</span><b>${state.todos.filter(t => !t.done).length}개</b></div>`;
+}
+
+/* ---------------- board ---------------- */
+function renderBoard() {
+  $('#boardFrom').innerHTML = state.members.map(m =>
+    `<option value="${m.id}" ${m.id === 'dad' ? 'selected' : ''}>${esc(m.role)}</option>`).join('');
+  const list = state.board.slice().sort((a, b) => b.at - a.at).slice(0, 20);
+  $('#msgs').innerHTML = list.length ? list.map(b => {
+    const m = M(b.memberId) || { name: '가족', color: '#38BDF8' };
+    return `<div class="msg">
+      <span class="ava sm" style="--c:${m.color}"><span>${esc(monoOf(m))}</span></span>
+      <div class="body">
+        <div class="mh"><span class="nm" style="color:${m.color}">${esc(m.name)}</span><span class="tm">${ago(b.at)}</span></div>
+        <div class="tx">${esc(b.text)}</div>
+      </div>
+      <button class="del" data-act="delMsg" data-id="${b.id}" aria-label="삭제">✕</button>
+    </div>`;
+  }).join('') : '<div class="empty">첫 메시지를 남겨보세요.</div>';
+}
+
+/* ---------------- master render ---------------- */
+function render() {
+  renderHeader(); renderMembers(); renderTodos(); renderBoost();
+  renderStats(); renderChart(); renderCalendar(); renderBoard();
+  $('#footStamp').textContent = '마지막 저장 · ' + new Date(state.updatedAt).toLocaleString('ko-KR');
+}
+render();
+
+/* ---------------- modal ---------------- */
+function openModal(title, body) {
+  $('#mTitle').textContent = title;
+  $('#mBody').innerHTML = body;
+  $('#ov').classList.add('open');
+}
+function closeModal() { $('#ov').classList.remove('open'); }
+
+/* settings */
+function openSettings() {
+  const rows = state.members.map(m => `
+    <div class="set-row">
+      <span class="ava sm" style="--c:${m.color}"><span>${esc(monoOf(m))}</span></span>
+      <input data-mid="${m.id}" data-f="name" value="${esc(m.name)}" placeholder="이름">
+      <input data-mid="${m.id}" data-f="role" value="${esc(m.role)}" placeholder="역할">
+      <input data-mid="${m.id}" data-f="birth" type="date" value="${m.birth || ''}" title="생년월일 (성장곡선 나이 계산)">
+    </div>`).join('');
+  openModal('설정 · 가족 정보', `
+    <div class="row2">
+      <div class="field"><label>팀 타이틀</label><input id="setTitle" value="${esc(state.title)}" maxlength="24"></div>
+      <div class="field"><label>서브 타이틀</label><input id="setSub" value="${esc(state.subtitle)}" maxlength="48"></div>
+    </div>
+    <div class="field"><label>가족 구성원 (이름 · 역할 · 생년월일)</label>${rows}</div>
+    <p class="hint">이름을 바꾸면 프로필 카드·보드·성장곡선에 모두 반영됩니다. 생년월일은 성장곡선의 만 나이 계산에 쓰입니다.</p>
+    <div class="actions"><button class="btn full" data-act="saveSettings">저장</button></div>
+    <hr class="sep">
+    <div class="actions">
+      <button class="btn ghost" data-act="sync">동기화 · 백업</button>
+      <button class="btn ghost danger" data-act="resetAll">데이터 초기화</button>
+    </div>
+  `);
+}
+
+function openMeasure() {
+  const m = M(ui.kid) || state.members.find(x => x.chart);
+  if (!m) return;
+  openModal('키 · 몸무게 기록', `
+    <p class="hint"><b style="color:#eaf2ff">${esc(m.name)}</b> (${esc(m.role)}) 의 새 측정값을 입력하세요. 저장하면 그래프와 백분위가 즉시 바뀝니다.</p>
+    <div class="field"><label>측정일</label><input id="msDate" type="date" value="${today}"></div>
+    <div class="row2">
+      <div class="field"><label>키 (cm)</label><input id="msH" type="number" step="0.1" min="80" max="210" placeholder="예: 173.2"></div>
+      <div class="field"><label>몸무게 (kg)</label><input id="msW" type="number" step="0.1" min="10" max="150" placeholder="예: 62.5"></div>
+    </div>
+    <div class="actions"><button class="btn gr full" data-act="saveMeasure">기록 추가</button></div>
+  `);
+  setTimeout(() => { const e = $('#msH'); if (e) e.focus(); }, 60);
+}
+
+function openEvent(preDate, ev) {
+  openModal(ev ? '가족 일정 수정' : '가족 일정 추가', `
+    <input type="hidden" id="evId" value="${ev ? ev.id : ''}">
+    <div class="field"><label>날짜</label><input id="evDate" type="date" value="${ev ? ev.date : (preDate || today)}"></div>
+    <div class="field"><label>일정</label><input id="evTitle" value="${ev ? esc(ev.title) : ''}" placeholder="예: 둘째 치과 검진" maxlength="40"></div>
+    <div class="field"><label>담당 (선택)</label><select id="evWho">
+      <option value="">가족 전체</option>
+      ${state.members.map(m => `<option value="${m.id}" ${ev && ev.memberId === m.id ? 'selected' : ''}>${esc(m.role)} · ${esc(m.name)}</option>`).join('')}
+    </select></div>
+    <div class="actions">${ev ? `<button class="btn ghost danger" data-act="delEvent" data-id="${ev.id}">삭제</button>` : ''}
+      <button class="btn full" data-act="saveEvent">${ev ? '저장' : '추가'}</button></div>
+  `);
+  setTimeout(() => { const e = $('#evTitle'); if (e) { e.focus(); e.select && e.select(); } }, 60);
+}
+
+const CHEERS = ['오늘도 최고야! 💪', '키 크는 중 ~ 잘하고 있어 🌱', '꾸준함이 이긴다. 화이팅!', '아빠가 응원한다 ⚡', '잘 먹고 잘 자자 👍'];
+function openCheer(id) {
+  const to = M(id); if (!to) return;
+  openModal(to.name + '에게 응원 보내기', `
+    <p class="hint">${esc(to.name)} (${esc(to.role)}) 님께 칭찬을 보냅니다. +5P가 함께 적립돼요.</p>
+    <div class="chips">${CHEERS.map(c => `<button data-act="pickCheer" data-t="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+    <div class="row2">
+      <div class="field"><label>보내는 사람</label><select id="cheerFrom">
+        ${state.members.filter(m => m.id !== id).map(m => `<option value="${m.id}">${esc(m.role)} · ${esc(m.name)}</option>`).join('')}
+      </select></div>
+      <div class="field"><label>받는 사람</label><input value="${esc(to.name)}" disabled></div>
+    </div>
+    <div class="field"><label>메시지</label><textarea id="cheerText" maxlength="120" placeholder="따뜻한 한마디">오늘도 최고야! 💪</textarea></div>
+    <div class="actions"><button class="btn full" data-act="sendCheer" data-id="${id}">보내기</button></div>
+  `);
+}
+
+/* sync modal */
+function openSync() {
+  const on = !!sync.url;
+  openModal('동기화 · 백업', `
+    <div class="syncbox">
+      <div class="st"><i class="badge ${on ? 'on' : ''}" style="pointer-events:none"><i></i><span class="lbl">${on ? '실시간 클라우드 연결됨' : '로컬 모드 (이 기기에만 저장)'}</span></i><b style="margin-left:auto">${sync.msg || ''}</b></div>
+      <div class="field"><label>Firebase Realtime Database URL</label>
+        <input id="syncUrl" placeholder="https://my-home-default-rtdb.firebaseio.com" value="${esc(sync.url)}"></div>
+      <div class="field"><label>방 이름 (path)</label><input id="syncPath" value="${esc(sync.path || 'family-hq')}" placeholder="family-hq"></div>
+      <div class="actions">
+        <button class="btn" data-act="saveSync">연결</button>
+        <button class="btn ghost" data-act="testSync">연결 테스트</button>
+        <button class="btn ghost danger" data-act="offSync">연결 해제</button>
+      </div>
+    </div>
+    <p class="hint">
+      <b style="color:#eaf2ff">준비 3단계</b><br>
+      1. <code>console.firebase.google.com</code> → 새 프로젝트 → <b>Realtime Database</b> 만들기<br>
+      2. Database 규칙(Rules)을 테스트용으로 <code>{".read":true,".write":true}</code> 로 설정<br>
+      3. 위 URL과 방 이름을 넣고 <b>연결</b> → 태블릿과 식구들 핸드폰에서 같은 HTML 파일을 열어 같은 URL을 입력하면 실시간으로 맞춰집니다. (5초마다 자동 확인)
+    </p>
+    <hr class="sep">
+    <div class="actions">
+      <button class="btn ghost" data-act="exportJson">JSON 백업 내보내기</button>
+      <button class="btn ghost" data-act="importJson">백업 가져오기</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+    <p class="hint" style="margin-top:8px">백업 파일은 이 브라우저의 <b>다운로드</b> 폴더에 저장됩니다. 새 기기에서 열 때 <b>가져오기</b>로 한 번에 복원하세요.</p>
+  `);
+}
+
+/* ---------------- actions ---------------- */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const act = el.dataset.act, id = el.dataset.id;
+
+  switch (act) {
+    /* ---- nav ---- */
+    case 'settings': openSettings(); break;
+    case 'closeModal': closeModal(); break;
+    case 'growthInfo': openGrowthInfo(); break;
+    case 'sync': openSync(); break;
+
+    /* ---- members ---- */
+    case 'editMember': {
+      const m = M(id); if (!m) break;
+      openModal('구성원 수정', `
+        <div class="row2">
+          <div class="field"><label>이름</label><input id="eName" value="${esc(m.name)}" maxlength="12"></div>
+          <div class="field"><label>역할 라벨</label><input id="eRole" value="${esc(m.role)}" maxlength="8"></div>
+        </div>
+        <div class="field"><label>생년월일</label><input id="eBirth" type="date" value="${m.birth || ''}"></div>
+        <p class="hint">이름·역할은 카드와 보드, 백분위 계산(생년월일)에 바로 반영됩니다.</p>
+        <div class="actions">
+          <button class="btn" data-act="saveMember" data-id="${m.id}">저장</button>
+          <button class="btn ghost" data-act="addMeasure" data-id="${m.id}">측정 기록 추가</button>
+        </div>`);
+      break;
+    }
+    case 'saveMember': {
+      const m = M(id); if (!m) break;
+      m.name = ($('#eName').value || m.name).trim();
+      m.role = ($('#eRole').value || m.role).trim();
+      m.birth = $('#eBirth').value || '';
+      save(); render(); closeModal(); toast('저장했습니다', 'gr');
+      break;
+    }
+    case 'cheer': openCheer(id); break;
+    case 'pickCheer': { const t = $('#cheerText'); if (t) t.value = el.dataset.t; break; }
+    case 'sendCheer': {
+      const to = M(id); if (!to) break;
+      const from = $('#cheerFrom').value;
+      const text = ($('#cheerText').value || '').trim();
+      if (!text) { toast('메시지를 입력하세요', 're'); break; }
+      state.board.push({ id: uid(), memberId: from, text: '👏 ' + to.name + ' · ' + text, at: Date.now() });
+      to.points = (to.points || 0) + 5;
+      save(); render(); closeModal();
+      toast(to.name + '에게 응원 +5P', 'gr');
+      break;
+    }
+
+    /* ---- todos ---- */
+    case 'filter': ui.todoFilter = id; renderTodos(); break;
+    case 'toggleTodo': {
+      const t = state.todos.find(x => x.id === id); if (!t) break;
+      t.done = !t.done;
+      const m = M(t.memberId);
+      if (m) {
+        m.points = Math.max(0, (m.points || 0) + (t.done ? (t.points || 10) : -(t.points || 10)));
+        const list = todosOf(m.id);
+        if (t.done && list.length && list.every(x => x.done) && m.streakLast !== today) {
+          m.streak = (m.streak || 0) + 1; m.streakLast = today;
+          toast(m.name + ' 오늘 루틴 완료! 🔥 ' + m.streak + '일', 'gr');
+        }
+      }
+      save(); render();
+      break;
+    }
+    case 'addTodo': addTodo(); break;
+    case 'delTodo': {
+      state.todos = state.todos.filter(t => t.id !== id);
+      save(); render(); toast('할 일을 삭제했습니다');
+      break;
+    }
+
+    /* ---- growth boost ---- */
+    case 'toggleRule': {
+      const mid = el.dataset.mid, rid = el.dataset.rid;
+      state.checks[today] = state.checks[today] || {};
+      const arr = state.checks[today][mid] = state.checks[today][mid] || [];
+      const i = arr.indexOf(rid);
+      const m = M(mid);
+      if (i >= 0) { arr.splice(i, 1); if (m) m.points = Math.max(0, (m.points || 0) - 15); }
+      else { arr.push(rid); if (m) m.points = (m.points || 0) + 15; }
+      save(); render();
+      break;
+    }
+
+    /* ---- growth chart ---- */
+    case 'kid': ui.kid = id; renderChart(); break;
+    case 'metric': ui.metric = id; renderChart(); break;
+    case 'addMeasure': if (id) ui.kid = id; openMeasure(); break;
+    case 'saveMeasure': {
+      const m = M(ui.kid); if (!m) break;
+      const d = $('#msDate').value || today;
+      const h = parseFloat($('#msH').value), w = parseFloat($('#msW').value);
+      if (!(h > 0) && !(w > 0)) { toast('키나 몸무게 중 하나는 입력하세요', 're'); break; }
+      const rec = { date: d };
+      if (h > 0) rec.h = Math.round(h * 10) / 10;
+      if (w > 0) rec.w = Math.round(w * 10) / 10;
+      m.measures = (m.measures || []).filter(x => x.date !== d);
+      m.measures.push(rec);
+      m.measures.sort((a, b) => a.date < b.date ? -1 : 1);
+      m.points = (m.points || 0) + 10;
+      save(); render(); closeModal();
+      toast(m.name + ' 기록 저장 완료 (+10P)', 'gr');
+      break;
+    }
+
+    /* ---- calendar ---- */
+    case 'calPrev': ui.calMonth.m--; if (ui.calMonth.m < 0) { ui.calMonth.m = 11; ui.calMonth.y--; } renderCalendar(); break;
+    case 'calNext': ui.calMonth.m++; if (ui.calMonth.m > 11) { ui.calMonth.m = 0; ui.calMonth.y++; } renderCalendar(); break;
+    case 'calToday': { const d = new Date(); ui.calMonth = { y: d.getFullYear(), m: d.getMonth() }; renderCalendar(); break; }
+    case 'dayClick': openEvent(el.dataset.date); break;
+    case 'addEvent': openEvent(); break;
+    case 'editEvent': { const ev = state.events.find(x => x.id === id); if (ev) openEvent(null, ev); break; }
+    case 'saveEvent': {
+      const d = $('#evDate').value, t = ($('#evTitle').value || '').trim(), who = $('#evWho').value;
+      const eid = $('#evId') ? $('#evId').value : '';
+      if (!d || !t) { toast('날짜와 일정을 입력하세요', 're'); break; }
+      if (eid) {
+        const ev = state.events.find(x => x.id === eid);
+        if (ev) { ev.date = d; ev.title = t; ev.memberId = who; }
+      } else {
+        state.events.push({ id: uid(), date: d, title: t, memberId: who });
+      }
+      save(); render(); closeModal(); toast(eid ? '일정을 수정했습니다' : '일정을 추가했습니다', 'gr');
+      break;
+    }
+    case 'delEvent': state.events = state.events.filter(x => x.id !== id); save(); render(); closeModal(); break;
+
+    /* ---- board ---- */
+    case 'postBoard': postBoard(); break;
+    case 'delMsg': state.board = state.board.filter(x => x.id !== id); save(); render(); break;
+
+    /* ---- settings ---- */
+    case 'saveSettings': {
+      state.title = ($('#setTitle').value || 'FAMILY HQ').trim();
+      state.subtitle = ($('#setSub').value || '').trim();
+      $$('#mBody .set-row input').forEach(inp => {
+        const m = M(inp.dataset.mid); if (!m) return;
+        const f = inp.dataset.f;
+        if (f === 'name' && inp.value.trim()) m.name = inp.value.trim();
+        if (f === 'role' && inp.value.trim()) m.role = inp.value.trim();
+        if (f === 'birth') m.birth = inp.value || '';
+      });
+      save(); render(); closeModal(); toast('설정을 저장했습니다', 'gr');
+      break;
+    }
+    case 'resetAll': {
+      openModal('데이터 초기화', `<p class="hint">이 기기의 대시보드 데이터(할 일·일정·기록·메시지)를 모두 지우고 처음 상태로 돌립니다. 되돌릴 수 없습니다.</p>
+        <div class="actions"><button class="btn ghost danger" data-act="resetConfirm">초기화 실행</button><button class="btn ghost" data-act="closeModal">취소</button></div>`);
+      break;
+    }
+    case 'resetConfirm': localStorage.removeItem(KEY); location.reload(); break;
+
+    /* ---- sync ---- */
+    case 'saveSync': {
+      const url = ($('#syncUrl').value || '').trim().replace(/\/+$/, '');
+      const path = ($('#syncPath').value || 'family-hq').trim().replace(/^\/+|\/+$/g, '');
+      if (!url) { toast('URL을 입력하세요', 're'); break; }
+      sync.url = url; sync.path = path || 'family-hq';
+      state.sync = { url: sync.url, path: sync.path };
+      save(); startPolling(); pushRemote(true).then(() => {
+        closeModal(); toast('실시간 동기화를 시작했습니다', 'gr');
+      });
+      break;
+    }
+    case 'offSync': {
+      sync.url = ''; sync.ok = false; sync.msg = ''; state.sync = { url: '', path: sync.path };
+      stopPolling(); save(); renderBadge(); closeModal(); toast('로컬 모드로 전환했습니다');
+      break;
+    }
+    case 'testSync': testSync(); break;
+    case 'exportJson': exportJson(); break;
+    case 'importJson': { const f = $('#importFile'); if (f) f.click(); break; }
+    default: break;
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('#ov').classList.contains('open')) closeModal();
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (e.key === 'Enter' && tag === 'input') {
+    if (e.target.id === 'todoInput') { e.preventDefault(); addTodo(); }
+    if (e.target.id === 'boardInput') { e.preventDefault(); postBoard(); }
+  }
+});
+
+$('#ov').addEventListener('click', e => { if (e.target.id === 'ov') closeModal(); });
+
+function addTodo() {
+  const inp = $('#todoInput'), text = (inp.value || '').trim(), who = $('#todoWho').value;
+  if (!text) { inp.focus(); return; }
+  state.todos.push({ id: uid(), memberId: who, text, done: false, points: 10 });
+  inp.value = '';
+  save(); render();
+  toast('할 일을 추가했습니다', 'gr');
+}
+
+function postBoard() {
+  const inp = $('#boardInput'), text = (inp.value || '').trim(), from = $('#boardFrom').value;
+  if (!text) { inp.focus(); return; }
+  state.board.push({ id: uid(), memberId: from, text, at: Date.now() });
+  inp.value = '';
+  save(); render();
+}
+
+function openGrowthInfo() {
+  openModal('성장도표 기준', `
+    <p class="hint">질병관리청·대한소아청소년과학회 <b style="color:#eaf2ff">「2017 소아청소년 성장도표」</b> 남아 신장·체중 (만 6~18세).</p>
+    <div class="records" style="border-top:0;padding-top:0">
+      <table><thead><tr><th>만 나이</th><th>키 3%</th><th>키 50%</th><th>키 97%</th><th>몸무게 50%</th></tr></thead><tbody>
+      ${AGES.map((a, i) => `<tr><td>${a}세</td><td>${GROWTH.height.p3[i]}</td><td><b>${GROWTH.height.p50[i]}</b></td><td>${GROWTH.height.p97[i]}</td><td>${GROWTH.weight.p50[i]}</td></tr>`).join('')}
+      </tbody></table>
+    </div>
+    <p class="hint" style="margin-top:10px">그래프의 10·25·75·90 백분위 곡선은 위 3·50·97 백분위 값을 정규분포(z) 공간에서 보간해 그린 참고 곡선입니다. 성장도표는 진단이 아닌 선별 참고자료이며, 백분위가 갑자기 떨어지거나 3백분위 미만이면 소아청소년과 상담을 권합니다.</p>
+    <div class="actions"><button class="btn full" data-act="closeModal">확인</button></div>
+  `);
+}
+
+/* ---------------- firebase REST sync ---------------- */
+function endpoint() { return sync.url.replace(/\/+$/, '') + '/' + (sync.path || 'family-hq') + '.json'; }
+
+function renderBadge() {
+  const b = $('#syncBadge');
+  if (!b) return;
+  b.classList.remove('on', 'err');
+  const lbl = b.querySelector('.lbl');
+  if (sync.url && sync.ok) { b.classList.add('on'); lbl.textContent = '실시간 클라우드 연결됨'; }
+  else if (sync.url && sync.err) { b.classList.add('err'); lbl.textContent = '동기화 오류'; }
+  else if (sync.url) { lbl.textContent = '연결 확인 중…'; }
+  else { lbl.textContent = '로컬 모드'; }
+  b.title = sync.url ? '동기화 설정 · ' + endpoint() : '동기화 설정을 열려면 클릭';
+}
+
+async function pushRemote(force) {
+  if (!sync.url) return false;
+  try {
+    const r = await fetch(endpoint(), {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state)
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    sync.ok = true; sync.err = false; sync.msg = '마지막 전송 ' + new Date().toLocaleTimeString('ko-KR');
+    renderBadge();
+    return true;
+  } catch (err) {
+    sync.err = true; sync.ok = false; sync.msg = '오류: ' + err.message;
+    renderBadge();
+    if (force) toast('동기화 실패: ' + err.message, 're');
+    return false;
+  }
+}
+
+async function pullRemote() {
+  if (!sync.url) return;
+  try {
+    const r = await fetch(endpoint(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const remote = await r.json();
+    sync.ok = true; sync.err = false; sync.msg = '마지막 확인 ' + new Date().toLocaleTimeString('ko-KR');
+    renderBadge();
+    if (remote && remote.updatedAt && remote.updatedAt > (state.updatedAt || 0) + 800) {
+      state = remote;
+      state.checks = state.checks || {}; state.sync = { url: sync.url, path: sync.path };
+      localStorage.setItem(KEY, JSON.stringify(state));
+      render();
+      toast('다른 기기의 변경을 받았습니다', 'gr');
+    }
+  } catch (err) {
+    sync.err = true; sync.ok = false; sync.msg = '오류: ' + err.message;
+    renderBadge();
+  }
+  if ($('#ov').classList.contains('open') && $('#syncUrl')) {
+    const st = $('#mBody .syncbox .st b'); if (st) st.textContent = sync.msg || '';
+  }
+}
+
+function startPolling() {
+  stopPolling();
+  pullRemote();
+  sync.timer = setInterval(pullRemote, 5000);
+}
+function stopPolling() { if (sync.timer) { clearInterval(sync.timer); sync.timer = null; } }
+
+async function testSync() {
+  const url = ($('#syncUrl').value || '').trim().replace(/\/+$/, '');
+  const path = ($('#syncPath').value || 'family-hq').trim().replace(/^\/+|\/+$/g, '');
+  if (!url) { toast('URL을 입력하세요', 're'); return; }
+  const st = $('#mBody .syncbox .st b');
+  if (st) st.textContent = '테스트 중…';
+  try {
+    const r = await fetch(url + '/' + path + '.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status + ' (규칙/URL 확인)');
+    const j = await r.json();
+    if (st) st.textContent = j ? '기존 데이터 발견 · 연결 가능합니다' : '연결 가능 (빈 방)';
+    toast('연결 테스트 성공', 'gr');
+  } catch (err) {
+    if (st) st.textContent = '실패: ' + err.message;
+    toast('연결 테스트 실패: ' + err.message, 're');
+  }
+}
+
+function exportJson() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  const d = new Date();
+  a.href = URL.createObjectURL(blob);
+  a.download = 'family-hq-backup-' + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  toast('백업 파일을 내려받았습니다', 'gr');
+}
+
+document.addEventListener('change', e => {
+  if (e.target && e.target.id === 'importFile') {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const s = JSON.parse(rd.result);
+        if (!s || !Array.isArray(s.members) || !s.members.length) throw new Error('형식이 올바르지 않습니다');
+        state = s;
+        state.checks = state.checks || {}; state.todos = state.todos || [];
+        state.events = state.events || []; state.board = state.board || [];
+        state.sync = state.sync || { url: '', path: 'family-hq' };
+        save(); render(); closeModal();
+        toast('백업을 복원했습니다', 'gr');
+      } catch (err) { toast('가져오기 실패: ' + err.message, 're'); }
+    };
+    rd.readAsText(f);
+  }
+});
+
+/* ---------------- boot sync ---------------- */
+(function bootSync() {
+  if (state.sync && state.sync.url) {
+    sync.url = state.sync.url; sync.path = state.sync.path || 'family-hq';
+    startPolling();
+  }
+  renderBadge();
+})();
+
+/* storage availability guard */
+(function storageCheck() {
+  try {
+    localStorage.setItem('__fq', '1'); localStorage.removeItem('__fq');
+  } catch (e) {
+    setTimeout(() => toast('이 브라우저는 자동 저장이 막혀 있습니다 · JSON 백업을 사용하세요', 're'), 1200);
+  }
+})();
+
+/* keep the chart crisp when the window / orientation changes */
+let rzTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(rzTimer);
+  rzTimer = setTimeout(() => { try { renderChart(); } catch (e) {} }, 220);
+});
+
+/* smooth scroll for bottom nav */
+$$('.bnav a').forEach(a => a.addEventListener('click', ev => {
+  const t = document.querySelector(a.getAttribute('href'));
+  if (!t) return;
+  ev.preventDefault();
+  t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}));
+
+/* keep clock/ago fresh */
+setInterval(() => { renderBoard(); }, 60000);
+</script>
+</body>
+</html>
